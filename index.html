@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#174c35">
-<meta name="description" content="KATERINA v4 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
+<meta name="description" content="KATERINA v4.1 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
-<title>KATERINA v4 — SMKN 2 Kerinci</title>
+<title>KATERINA v4.1 — SMKN 2 Kerinci</title>
 <style>
 :root{--g:#174c35;--g2:#1f7a4d;--bg:#f3f7f4;--card:#fff;--line:#dbe7df;--text:#173127;--muted:#64746c;--warn:#b7791f;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
@@ -31,7 +31,7 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
 </style>
 </head>
 <body>
-<header><div class="wrap brand"><img class="logo" src="icon.svg"><div><h1>🐄 KATERINA v4</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
+<header><div class="wrap brand"><img class="logo" src="icon.svg"><div><h1>🐄 KATERINA v4.1</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
 <nav class="no-print">
 <button class="active" onclick="showPage('skrining',this)">📸 Skrining</button>
 <button onclick="showPage('data',this)">🐄 Data</button>
@@ -90,7 +90,7 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
 <div class="notice"><b>Keselamatan:</b> jangan memaksa ternak untuk difoto. Jaga jarak aman, gunakan prosedur handling yang benar, dan jangan memberikan obat berdasarkan hasil aplikasi.</div>
 </div></section>
 </main>
-<footer>KATERINA v4 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
+<footer>KATERINA v4.1 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
 
 <script>
 const qs=[
@@ -105,14 +105,16 @@ const qs=[
 ["Kulit/bulu","Bulu/ kulit relatif normal, tidak ada kelainan mencolok"],
 ["Feses","Konsistensi/warna tidak menunjukkan perubahan mencolok"]
 ];
-const LS="katerina_v4_local";
+const LS="katerina_v41_local";
 const SUPABASE_URL="https://bkrbxddqlwgxikptbvlf.supabase.co";
 const SUPABASE_KEY="sb_publishable_NaQYXkA4fYYpQ3e_RvY0Jg_21TAYpq0";
 const CLOUD_TABLE=SUPABASE_URL+"/rest/v1/screenings";
+const APP_VERSION="v4.1";
 
 async function syncToCloud(rec){
   try{
     const payload={
+      client_id:rec.clientId||null,
       animal_id:rec.id, student_name:rec.student, group_name:rec.group,
       inspection_date:rec.date, score:rec.score, percent:rec.percent,
       status:rec.status, action:rec.action,
@@ -144,15 +146,17 @@ async function loadCloud(){
     if(!r.ok) throw new Error(await r.text());
     const rows=await r.json();
     const cloud=rows.map(x=>({
-      id:x.animal_id, student:x.student_name||"", group:x.group_name||"",
+      clientId:x.client_id||"", id:x.animal_id, student:x.student_name||"", group:x.group_name||"",
       date:x.inspection_date||"", score:Number(x.score||0), percent:Number(x.percent||0),
       status:x.status||"", action:x.action||"", teacher:x.teacher_name||"",
       teacherNote:x.teacher_note||"", created:x.created_at||""
     }));
     const local=getData(), map=new Map();
+    const fingerprint=x=>[x.id,x.student,x.group,x.date,x.score,x.percent,x.status].map(v=>String(v??"").trim()).join("|");
     [...local,...cloud].forEach(x=>{
-      const key=(x.created||"")+"|"+x.id+"|"+x.date+"|"+x.student;
-      map.set(key,x);
+      const key=x.clientId ? "cid:"+x.clientId : "fp:"+fingerprint(x);
+      // Prefer cloud copy when the same old-v4 record exists locally.
+      if(map.has(key) && x.created) map.set(key,x); else if(!map.has(key)) map.set(key,x);
     });
     setData([...map.values()]);
     renderLocal();
@@ -183,7 +187,7 @@ function analyze(){
  let critical=false; // critical override can be extended by teacher rubric
  let status=pct>=80?"SESUAI HASIL SKRINING":pct>=60?"PERLU OBSERVASI ULANG":"TERINDIKASI TIDAK SEHAT";
  let action=status==="SESUAI HASIL SKRINING"?"Lanjutkan pemantauan rutin.":status==="PERLU OBSERVASI ULANG"?"Amati ulang, catat perubahan, periksa lingkungan, dan konsultasikan kepada guru/petugas terkait.":"Laporkan kepada guru/petugas. Jangan memberikan obat atau tindakan medis sendiri.";
- const rec={id,student,group:document.getElementById("group").value.trim(),date:document.getElementById("date").value,score:total,percent:pct,status,action,teacher:"",teacherNote:"",created:new Date().toISOString()};
+ const rec={clientId:(crypto.randomUUID?crypto.randomUUID():"katerina-"+Date.now()+"-"+Math.random().toString(36).slice(2)),id,student,group:document.getElementById("group").value.trim(),date:document.getElementById("date").value,score:total,percent:pct,status,action,teacher:"",teacherNote:"",created:new Date().toISOString()};
  const d=getData();d.push(rec);setData(d);refresh();syncToCloud(rec);
  const cls=status==="SESUAI HASIL SKRINING"?"green":status==="PERLU OBSERVASI ULANG"?"yellow":"redbox";
  document.getElementById("result").innerHTML=`<div class="result ${cls}"><h3>${status}</h3><b>Skor: ${total}/20 (${pct}%)</b><p>${action}</p><div class="small">Hasil ini adalah skrining pembelajaran dan tidak dapat memastikan diagnosis penyakit.</div></div>`;
