@@ -1,0 +1,19 @@
+# KATERINA v3 — SETUP DATABASE TERPUSAT
+
+Paket ini sudah memiliki struktur aplikasi untuk database kelas. Agar data seluruh siswa masuk ke satu dashboard guru, buat project Supabase lalu:
+
+1. Buka Supabase dan buat project baru.
+2. Buka SQL Editor.
+3. Jalankan `supabase_schema.sql`.
+4. Pastikan tabel `screenings` diekspos pada Data API.
+5. Ambil Project URL dan Publishable Key dari dashboard.
+6. Masukkan keduanya ke konfigurasi JavaScript KATERINA pada bagian konfigurasi database.
+
+PENTING:
+- Gunakan **publishable/anon key** pada aplikasi browser, bukan service-role key.
+- Aktifkan Row Level Security.
+- Untuk tahap sekolah yang lebih aman, gunakan Supabase Auth agar setiap siswa/guru memiliki akun.
+- Jangan menyimpan data sensitif atau foto siswa tanpa kebijakan privasi sekolah.
+- Versi paket ini masih menggunakan penyimpanan lokal sebagai mode aman/fallback. Integrasi database terpusat memerlukan pengisian kredensial project sekolah.
+
+Referensi teknis: dokumentasi resmi Supabase menjelaskan penggunaan `supabase-js` melalui CDN dan pembuatan client browser menggunakan Project URL + publishable key.
