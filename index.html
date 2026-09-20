@@ -1,146 +1,79 @@
-<!doctype html>
-<html lang="id">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#174c35">
-<meta name="description" content="KATERINA v3 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon.svg">
-<title>KATERINA v3 — SMKN 2 Kerinci</title>
-<style>
-:root{--g:#174c35;--g2:#1f7a4d;--bg:#f3f7f4;--card:#fff;--line:#dbe7df;--text:#173127;--muted:#64746c;--warn:#b7791f;--red:#b42318}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
-header{background:linear-gradient(135deg,var(--g),#2d8b5a);color:#fff;padding:20px 16px}
-.wrap{max-width:900px;margin:auto}.brand{display:flex;gap:12px;align-items:center}.logo{width:54px;height:54px;border-radius:15px;background:#fff;padding:5px}
-h1{font-size:24px;margin:0}h2{font-size:19px;margin:0 0 12px}h3{font-size:16px;margin:0 0 8px}.tag{opacity:.9;font-size:13px}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;padding:10px;background:#fff;position:sticky;top:0;z-index:5;border-bottom:1px solid var(--line)}
-nav button,.btn{border:0;border-radius:12px;padding:11px 9px;font-weight:700;cursor:pointer}
-nav button{background:#eef5f0;color:var(--g)}nav button.active{background:var(--g2);color:#fff}
-main{padding:14px}.page{display:none}.page.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;margin:10px 0;box-shadow:0 4px 15px #1731270a}
-label{display:block;font-weight:700;font-size:13px;margin:9px 0 5px}input,select,textarea{width:100%;padding:11px;border:1px solid #cbd9d1;border-radius:11px;font:inherit;background:#fff}
-textarea{min-height:90px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.photo{border:2px dashed #b9cfc2;border-radius:14px;padding:12px;text-align:center;background:#fbfdfc}.photo img{max-width:100%;max-height:170px;border-radius:10px;margin-top:7px;display:none}
-.q{padding:11px 0;border-bottom:1px solid #e8efeb}.q:last-child{border-bottom:0}.qtitle{font-weight:700;font-size:14px;margin-bottom:6px}.opts{display:flex;gap:7px}.opts label{margin:0;flex:1}.opts input{width:auto}.btn{background:var(--g2);color:#fff}.btn.secondary{background:#eaf2ed;color:var(--g)}.btn.red{background:var(--red)}.btn.full{width:100%;margin-top:10px}
-.result{padding:15px;border-radius:15px;margin-top:12px}.green{background:#e9f7ef;color:#145c36}.yellow{background:#fff5d9;color:#7a5511}.redbox{background:#fdecea;color:#8d1d14}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.stat{background:#f4f8f5;padding:12px;border-radius:13px;text-align:center}.stat b{display:block;font-size:22px;color:var(--g)}
-table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left}th{background:#f3f7f4}
-.small{font-size:12px;color:var(--muted)}.notice{padding:10px;border-left:4px solid #d1a22c;background:#fff9e6;border-radius:8px;font-size:13px}
-footer{text-align:center;color:var(--muted);padding:25px;font-size:12px}
-@media(max-width:600px){.grid,.photo-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}nav{grid-template-columns:repeat(2,1fr)}}
-@media print{nav,.no-print{display:none!important}.page{display:block!important}body{background:#fff}.card{box-shadow:none}}
-</style>
-</head>
-<body>
-<header><div class="wrap brand"><img class="logo" src="icon.svg"><div><h1>🐄 KATERINA v3</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
-<nav class="no-print">
-<button class="active" onclick="showPage('skrining',this)">📸 Skrining</button>
-<button onclick="showPage('data',this)">🐄 Data</button>
-<button onclick="showPage('riwayat',this)">📋 Riwayat</button>
-<button onclick="showPage('dashboard',this)">📊 Dashboard</button>
-<button onclick="showPage('guru',this)">👩‍🏫 Guru</button>
-<button onclick="showPage('tentang',this)">ℹ️ Panduan</button>
-</nav>
-<main class="wrap">
 
-<section id="skrining" class="page active">
-<div class="card"><h2>📋 Identitas Pemeriksaan</h2>
-<div class="grid">
-<div><label>ID Ternak *</label><input id="animalId" placeholder="Contoh: ATR-001"></div>
-<div><label>Nama siswa *</label><input id="student" placeholder="Nama lengkap"></div>
-<div><label>Kelompok</label><input id="group" placeholder="Contoh: Kelompok 1"></div>
-<div><label>Tanggal</label><input id="date" type="date"></div>
-</div></div>
+🐄 KATERINA v4
+Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci
+📸 Skrining
+🐄 Data
+📋 Riwayat
+📊 Dashboard
+👩‍🏫 Guru
+ℹ️ Panduan
+📋 Identitas Pemeriksaan
+ID Ternak *
+Contoh: ATR-001
+Nama siswa *
+Nama lengkap
+Kelompok
+Contoh: Kelompok 1
+Tanggal
 
-<div class="card"><h2>📸 Dokumentasi</h2><div class="small">Gunakan kamera HP. Foto hanya untuk dokumentasi skrining; bukan diagnosis otomatis.</div>
-<div class="photo-grid">
-<div class="photo"><b>Depan</b><input type="file" accept="image/*" capture="environment" onchange="preview(this,'p1')"><img id="p1"></div>
-<div class="photo"><b>Samping</b><input type="file" accept="image/*" capture="environment" onchange="preview(this,'p2')"><img id="p2"></div>
-<div class="photo"><b>Belakang</b><input type="file" accept="image/*" capture="environment" onchange="preview(this,'p3')"><img id="p3"></div>
-<div class="photo"><b>Feses</b><input type="file" accept="image/*" capture="environment" onchange="preview(this,'p4')"><img id="p4"></div>
-</div></div>
-
-<div class="card"><h2>🔎 Observasi 10 Indikator</h2>
-<div id="questions"></div>
-<div class="notice">Skor pembelajaran: <b>2 = normal</b>, <b>1 = perlu perhatian</b>, <b>0 = sangat abnormal</b>. Ambang warna adalah rubrik pembelajaran, bukan ambang diagnosis veteriner.</div>
-<button class="btn full" onclick="analyze()">🔎 ANALISIS SKRINING</button>
-<div id="result"></div></div>
-</section>
-
-<section id="data" class="page"><div class="card"><h2>🐄 Data Ternak</h2><div class="small">Daftar ID yang pernah diperiksa pada perangkat ini atau database kelas jika dikonfigurasi.</div><div id="animalList"></div></div></section>
-
-<section id="riwayat" class="page"><div class="card"><h2>📋 Riwayat Pemeriksaan</h2><div id="history"></div>
-<button class="btn secondary no-print" onclick="exportCSV()">⬇️ Ekspor CSV</button>
-<button class="btn red no-print" onclick="clearLocal()">Hapus data lokal</button></div></section>
-
-<section id="dashboard" class="page"><div class="card"><h2>📊 Dashboard Kelas</h2><div class="stats">
-<div class="stat"><b id="sTotal">0</b>Pemeriksaan</div><div class="stat"><b id="sAnimal">0</b>ID ternak</div><div class="stat"><b id="sGreen">0</b>Sesuai skrining</div><div class="stat"><b id="sYellow">0</b>Observasi ulang</div>
-</div><div id="dashboardTable" style="margin-top:12px"></div></div></section>
-
-<section id="guru" class="page"><div class="card"><h2>👩‍🏫 Verifikasi Guru</h2>
-<label>Nama guru</label><input id="teacherName" placeholder="Yoti Endrianis, A.Md., S.Pd.">
-<label>Catatan verifikasi</label><textarea id="teacherNote" placeholder="Catatan guru..."></textarea>
-<button class="btn" onclick="verifyLast()">✅ Verifikasi pemeriksaan terakhir</button>
-<div id="verifyMsg" class="small" style="margin-top:10px"></div>
-</div>
-<div class="card"><h3>☁️ Database Kelas</h3><div class="small">Versi paket ini mendukung database terpusat melalui Supabase setelah URL dan publishable key sekolah dimasukkan ke konfigurasi. Jangan memasukkan service-role key ke aplikasi.</div>
-<div class="notice">Untuk tahap uji coba, KATERINA otomatis menyimpan data di perangkat. Untuk database kelas terpusat, ikuti SETUP_DATABASE.txt.</div></div></section>
-
-<section id="tentang" class="page"><div class="card"><h2>ℹ️ Panduan Penggunaan</h2>
-<ol><li>Isi ID ternak dan identitas siswa.</li><li>Ambil 4 foto: depan, samping, belakang, feses.</li><li>Nilai 10 indikator kesehatan.</li><li>Tekan Analisis.</li><li>Hasil dicatat sebagai skrining pembelajaran.</li><li>Guru melakukan verifikasi bila diperlukan.</li><li>Data dapat diekspor ke CSV.</li></ol>
-<div class="notice"><b>Keselamatan:</b> jangan memaksa ternak untuk difoto. Jaga jarak aman, gunakan prosedur handling yang benar, dan jangan memberikan obat berdasarkan hasil aplikasi.</div>
-</div></section>
-</main>
-<footer>KATERINA v3 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
-
-<script>
-const qs=[
-["Aktivitas/perilaku","Aktif, responsif, tidak terus-menerus menyendiri"],
-["Nafsu makan/minum","Makan dan minum normal"],
-["Mata","Mata cerah, tidak keruh/berlebihan mengeluarkan cairan"],
-["Hidung","Tidak ada leleran abnormal"],
-["Pernapasan","Teratur, tidak sesak/berat"],
-["Postur","Berdiri normal, tidak terus membungkuk/gelisah"],
-["Gerak","Berjalan normal, tidak pincang/enggan bergerak"],
-["Kondisi tubuh","Proporsional dan tidak menunjukkan penurunan kondisi yang mencolok"],
-["Kulit/bulu","Bulu/ kulit relatif normal, tidak ada kelainan mencolok"],
-["Feses","Konsistensi/warna tidak menunjukkan perubahan mencolok"]
-];
-const LS="katerina_v3_local";
-document.getElementById("date").value=new Date().toISOString().slice(0,10);
-document.getElementById("questions").innerHTML=qs.map((q,i)=>`<div class="q"><div class="qtitle">${i+1}. ${q[0]}</div><div class="small">${q[1]}</div><div class="opts">
-<label><input type="radio" name="q${i}" value="2"> 2 Normal</label>
-<label><input type="radio" name="q${i}" value="1"> 1 Perhatian</label>
-<label><input type="radio" name="q${i}" value="0"> 0 Abnormal</label></div></div>`).join("");
-function getData(){try{return JSON.parse(localStorage.getItem(LS)||"[]")}catch(e){return[]}}
-function setData(a){localStorage.setItem(LS,JSON.stringify(a))}
-function preview(inp,id){const f=inp.files[0],img=document.getElementById(id);if(f){img.src=URL.createObjectURL(f);img.style.display="block"}}
-function showPage(id,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));btn.classList.add("active");refresh()}
-function analyze(){
- const id=document.getElementById("animalId").value.trim(),student=document.getElementById("student").value.trim();
- if(!id||!student){alert("Isi ID ternak dan nama siswa.");return}
- let scores=[];for(let i=0;i<10;i++){const r=document.querySelector(`input[name=q${i}]:checked`);if(!r){alert("Lengkapi semua 10 indikator.");return}scores.push(+r.value)}
- const total=scores.reduce((a,b)=>a+b,0), pct=Math.round(total/20*100);
- let critical=false; // critical override can be extended by teacher rubric
- let status=pct>=80?"SESUAI HASIL SKRINING":pct>=60?"PERLU OBSERVASI ULANG":"TERINDIKASI TIDAK SEHAT";
- let action=status==="SESUAI HASIL SKRINING"?"Lanjutkan pemantauan rutin.":status==="PERLU OBSERVASI ULANG"?"Amati ulang, catat perubahan, periksa lingkungan, dan konsultasikan kepada guru/petugas terkait.":"Laporkan kepada guru/petugas. Jangan memberikan obat atau tindakan medis sendiri.";
- const rec={id,student,group:document.getElementById("group").value.trim(),date:document.getElementById("date").value,score:total,percent:pct,status,action,teacher:"",teacherNote:"",created:new Date().toISOString()};
- const d=getData();d.push(rec);setData(d);refresh();
- const cls=status==="SESUAI HASIL SKRINING"?"green":status==="PERLU OBSERVASI ULANG"?"yellow":"redbox";
- document.getElementById("result").innerHTML=`<div class="result ${cls}"><h3>${status}</h3><b>Skor: ${total}/20 (${pct}%)</b><p>${action}</p><div class="small">Hasil ini adalah skrining pembelajaran dan tidak dapat memastikan diagnosis penyakit.</div></div>`;
-}
-function refresh(){
- const d=getData(),ids=[...new Set(d.map(x=>x.id))];
- document.getElementById("sTotal").textContent=d.length;document.getElementById("sAnimal").textContent=ids.length;
- document.getElementById("sGreen").textContent=d.filter(x=>x.status==="SESUAI HASIL SKRINING").length;
- document.getElementById("sYellow").textContent=d.filter(x=>x.status==="PERLU OBSERVASI ULANG").length;
- document.getElementById("animalList").innerHTML=ids.length?ids.map(id=>`<div class="card"><b>🐄 ${id}</b><div class="small">${d.filter(x=>x.id===id).length} pemeriksaan</div></div>`).join(""):"Belum ada data.";
- document.getElementById("history").innerHTML=d.length?d.slice().reverse().map(x=>`<div class="card"><b>${x.id}</b> — ${x.status}<br>${x.student} · ${x.date}<br><span class="small">Skor ${x.score}/20 (${x.percent}%) ${x.teacher?`· ✓ ${x.teacher}`:""}</span></div>`).join(""):"Belum ada pemeriksaan.";
- document.getElementById("dashboardTable").innerHTML=d.length?`<table><tr><th>Tanggal</th><th>ID</th><th>Siswa</th><th>Skor</th><th>Status</th></tr>${d.slice().reverse().map(x=>`<tr><td>${x.date}</td><td>${x.id}</td><td>${x.student}</td><td>${x.percent}%</td><td>${x.status}</td></tr>`).join("")}</table>`:"Belum ada data.";
-}
-function verifyLast(){const d=getData();if(!d.length){alert("Belum ada pemeriksaan.");return}const n=document.getElementById("teacherName").value.trim();if(!n){alert("Isi nama guru.");return}d[d.length-1].teacher=n;d[d.length-1].teacherNote=document.getElementById("teacherNote").value.trim();setData(d);document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan untuk pemeriksaan terakhir.";refresh()}
-function clearLocal(){if(confirm("Hapus seluruh data lokal KATERINA pada perangkat ini?")){localStorage.removeItem(LS);refresh()}}
-function exportCSV(){const d=getData();if(!d.length){alert("Belum ada data.");return}const rows=[["Tanggal","ID Ternak","Siswa","Kelompok","Skor","Persentase","Status","Tindakan","Guru","Catatan Guru"],...d.map(x=>[x.date,x.id,x.student,x.group,x.score,x.percent+"%",x.status,x.action,x.teacher,x.teacherNote])];const csv=rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"}));a.download="KATERINA_Rekap_SMKN2_Kerinci.csv";a.click()}
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
-refresh();
-</script>
-</body></html>
+20/09/2026
+📸 Dokumentasi
+Gunakan kamera HP. Foto hanya untuk dokumentasi skrining; bukan diagnosis otomatis.
+DepanNo file chosen
+SampingNo file chosen
+BelakangNo file chosen
+FesesNo file chosen
+🔎 Observasi 10 Indikator
+1. Aktivitas/perilaku
+Aktif, responsif, tidak terus-menerus menyendiri
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+2. Nafsu makan/minum
+Makan dan minum normal
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+3. Mata
+Mata cerah, tidak keruh/berlebihan mengeluarkan cairan
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+4. Hidung
+Tidak ada leleran abnormal
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+5. Pernapasan
+Teratur, tidak sesak/berat
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+6. Postur
+Berdiri normal, tidak terus membungkuk/gelisah
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+7. Gerak
+Berjalan normal, tidak pincang/enggan bergerak
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+8. Kondisi tubuh
+Proporsional dan tidak menunjukkan penurunan kondisi yang mencolok
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+9. Kulit/bulu
+Bulu/ kulit relatif normal, tidak ada kelainan mencolok
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+10. Feses
+Konsistensi/warna tidak menunjukkan perubahan mencolok
+ 2 Normal
+ 1 Perhatian
+ 0 Abnormal
+Skor pembelajaran: 2 = normal, 1 = perlu perhatian, 0 = sangat abnormal. Ambang warna adalah rubrik pembelajaran, bukan ambang diagnosis veteriner.
+🔎 ANALISIS SKRINING
+KATERINA v4 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.
