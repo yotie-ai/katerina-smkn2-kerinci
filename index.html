@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#174c35">
-<meta name="description" content="KATERINA v4.3 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
+<meta name="description" content="KATERINA v4.3.1 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
 <link rel="manifest" href="manifest.webmanifest">
-<title>KATERINA v4.3 — SMKN 2 Kerinci</title>
+<title>KATERINA v4.3.1 — SMKN 2 Kerinci</title>
 <style>
 :root{--g:#174c35;--g2:#1f7a4d;--bg:#f3f7f4;--card:#fff;--line:#dbe7df;--text:#173127;--muted:#64746c;--warn:#b7791f;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
@@ -32,7 +32,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 </style>
 </head>
 <body>
-<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.3</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
+<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.3.1</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
 
 <nav class="no-print">
 <button class="active" onclick="showPage('skrining',this)">📸 Skrining</button>
@@ -95,11 +95,11 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 <div id="verifyMsg" class="small" style="margin-top:10px"></div></div>
 <div class="card"><h3>☁️ Status Database</h3><div id="cloudStatus" class="notice">Menghubungkan ke database...</div></div></section>
 
-<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.3</h2>
+<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.3.1</h2>
 <ol><li>Isi ID ternak dan identitas siswa.</li><li>Ambil dokumentasi bila diperlukan.</li><li>Nilai 10 indikator kesehatan.</li><li>Tekan <b>Analisis & Simpan Pemeriksaan</b>.</li><li>Hasil masuk ke Riwayat dan Dashboard.</li><li>Guru dapat melakukan verifikasi dan catatan.</li><li>Data dikirim ke database pusat bila koneksi tersedia.</li></ol>
 <div class="notice"><b>Penting:</b> KATERINA adalah alat skrining pembelajaran. Hasilnya tidak memastikan diagnosis penyakit. Jangan memberikan obat berdasarkan hasil aplikasi.</div></div></section>
 </main>
-<footer>KATERINA v4.3 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
+<footer>KATERINA v4.3.1 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
 
 <script>
 const qs=[
@@ -115,8 +115,8 @@ const qs=[
 ["Feses","Konsistensi/warna tidak menunjukkan perubahan mencolok"]
 ];
 
-const LS="katerina_v43_local";
-const OLD_LS="katerina_v42_local";
+const LS="katerina_v431_local";
+const OLD_LS="katerina_v43_local";
 const SUPABASE_URL="https://bkrbxddqlwgxikptbvlf.supabase.co";
 const SUPABASE_KEY="sb_publishable_NaQYXkA4fYYpQ3e_RvY0Jg_21TAYpq0";
 const CLOUD_TABLE=SUPABASE_URL+"/rest/v1/screenings";
@@ -166,7 +166,7 @@ async function loadCloud(){
   const r=await fetch(CLOUD_TABLE+"?select=*&order=created_at.desc",{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY}});
   if(!r.ok)throw new Error(await r.text());
   const rows=await r.json(),local=getData(),map=new Map();
-  [...local,...rows.map(x=>({clientId:x.client_id||"",id:x.animal_id,student:x.student_name||"",group:x.group_name||"",date:x.inspection_date||"",score:Number(x.score||0),percent:Number(x.percent||0),status:x.status||"",action:x.action||"",teacher:x.teacher_name||"",teacherNote:x.teacher_note||"",created:x.created_at||""}))].forEach(x=>{
+  [...local,...rows.map(x=>({clientId:x.client_id||"",cloudId:x.id||"",id:x.animal_id,student:x.student_name||"",group:x.group_name||"",date:x.inspection_date||"",score:Number(x.score||0),percent:Number(x.percent||0),status:x.status||"",action:x.action||"",teacher:x.teacher_name||"",teacherNote:x.teacher_note||"",cloudId:x.id||"",created:x.created_at||""}))].forEach(x=>{
    const k=x.clientId?"cid:"+x.clientId:"fp:"+fingerprint(x);
    if(!map.has(k)||x.created)map.set(k,x);
   });
@@ -182,7 +182,7 @@ async function analyze(){
  const total=scores.reduce((a,b)=>a+b,0),pct=Math.round(total/20*100);
  const status=pct>=80?"SESUAI HASIL SKRINING":pct>=60?"PERLU OBSERVASI ULANG":"TERINDIKASI TIDAK SEHAT – SEGERA LAPORKAN";
  const action=status.startsWith("SESUAI")?"Lanjutkan pemantauan rutin.":status.startsWith("PERLU")?"Amati ulang, catat perubahan, dan konsultasikan kepada guru/petugas terkait.":"Laporkan kepada guru/petugas. Jangan memberikan obat atau tindakan medis sendiri.";
- const rec={clientId:(crypto.randomUUID?crypto.randomUUID():"katerina-"+Date.now()),id,student,group:document.getElementById("group").value.trim(),date,score:total,percent:pct,status,action,teacher:"",teacherNote:"",created:new Date().toISOString()};
+ const rec={clientId:(crypto.randomUUID?crypto.randomUUID():"katerina-"+Date.now()),cloudId:"",id,student,group:document.getElementById("group").value.trim(),date,score:total,percent:pct,status,action,teacher:"",teacherNote:"",created:new Date().toISOString()};
  const d=getData();
  if(d.some(x=>fingerprint(x)===fingerprint(rec))){
   document.getElementById("result").innerHTML='<div class="result yellow"><h3>⚠️ Data serupa sudah ada</h3><p>Pemeriksaan dengan ID ternak, siswa, kelompok, tanggal, dan skor yang sama sudah tercatat.</p><p>Data <b>tidak dibuat dua kali</b>.</p></div>';return;
@@ -220,13 +220,46 @@ function render(){
 async function verifyLast(){
  const d=getData();if(!d.length){alert("Belum ada pemeriksaan.");return}
  const n=document.getElementById("teacherName").value.trim();if(!n){alert("Isi nama guru.");return}
- const rec=d[d.length-1];rec.teacher=n;rec.teacherNote=document.getElementById("teacherNote").value.trim();setData(d);render();
+ const rec=d[d.length-1];
+ rec.teacher=n;
+ rec.teacherNote=document.getElementById("teacherNote").value.trim();
+ setData(d);render();
+
  try{
-  if(!rec.clientId)throw new Error("client_id tidak tersedia");
-  const r=await fetch(CLOUD_TABLE+"?client_id=eq."+encodeURIComponent(rec.clientId),{method:"PATCH",headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify({teacher_name:n,teacher_note:rec.teacherNote})});
-  if(!r.ok)throw new Error(await r.text());
-  document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan di perangkat dan database pusat.";
- }catch(e){console.warn(e);document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan di perangkat. Database pusat belum diperbarui."}
+  let url="";
+  if(rec.cloudId){
+   url=CLOUD_TABLE+"?id=eq."+encodeURIComponent(rec.cloudId);
+  }else if(rec.clientId){
+   url=CLOUD_TABLE+"?client_id=eq."+encodeURIComponent(rec.clientId);
+  }else{
+   throw new Error("ID cloud/client tidak tersedia pada pemeriksaan terakhir");
+  }
+
+  const r=await fetch(url,{
+   method:"PATCH",
+   headers:{
+    "apikey":SUPABASE_KEY,
+    "Authorization":"Bearer "+SUPABASE_KEY,
+    "Content-Type":"application/json",
+    "Prefer":"return=representation"
+   },
+   body:JSON.stringify({teacher_name:n,teacher_note:rec.teacherNote})
+  });
+
+  const txt=await r.text();
+  if(!r.ok)throw new Error("HTTP "+r.status+" — "+txt);
+
+  let updated=[];
+  try{updated=txt?JSON.parse(txt):[]}catch(_){}
+  if(!Array.isArray(updated) || updated.length===0){
+   throw new Error("Database menerima permintaan tetapi tidak mengembalikan baris yang diperbarui. Periksa izin UPDATE/RLS.");
+  }
+
+  document.getElementById("verifyMsg").textContent="✓ Verifikasi dan catatan guru berhasil disimpan ke database pusat.";
+ }catch(e){
+  console.warn("Verifikasi cloud gagal:",e);
+  document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan di perangkat. Sinkronisasi database gagal: "+e.message;
+ }
 }
 
 function clearLocal(){if(confirm("Hapus seluruh data lokal KATERINA pada perangkat ini? Data di database pusat tidak dihapus.")){localStorage.removeItem(LS);render()}}
@@ -239,6 +272,6 @@ function exportCSV(){
 
 render();
 loadCloud();
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=43"));
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=431"));
 </script>
 </body></html>
