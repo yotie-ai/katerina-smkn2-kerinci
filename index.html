@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#174c35">
-<meta name="description" content="KATERINA v4.3.1 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
+<meta name="description" content="KATERINA v4.4 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
 <link rel="manifest" href="manifest.webmanifest">
-<title>KATERINA v4.3.1 — SMKN 2 Kerinci</title>
+<title>KATERINA v4.4 — SMKN 2 Kerinci</title>
 <style>
 :root{--g:#174c35;--g2:#1f7a4d;--bg:#f3f7f4;--card:#fff;--line:#dbe7df;--text:#173127;--muted:#64746c;--warn:#b7791f;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
@@ -30,9 +30,10 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 @media(max-width:700px){.grid,.photo-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}nav{grid-template-columns:repeat(3,1fr)}.opts{flex-direction:column}}
 @media print{nav,.no-print,header{display:none!important}.page{display:block!important}body{background:#fff}.card{box-shadow:none}}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.3.1</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
+<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.4</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
 
 <nav class="no-print">
 <button class="active" onclick="showPage('skrining',this)">📸 Skrining</button>
@@ -88,18 +89,36 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 </div>
 <div id="dashboardTable" style="margin-top:12px"></div></div></section>
 
-<section id="guru" class="page"><div class="card"><h2>👩‍🏫 Verifikasi Guru</h2>
+<section id="guru" class="page">
+<div class="card"><h2>🔐 Login Guru</h2>
+<div id="authSignedOut">
+<div class="small">Login diperlukan untuk membaca data pusat dan melakukan verifikasi guru.</div>
+<label>Email guru</label><input id="loginEmail" type="email" value="yotiendrianis56@guru.smk.belajar.id" autocomplete="username">
+<label>Password</label><input id="loginPassword" type="password" placeholder="Masukkan password" autocomplete="current-password">
+<button class="btn full" onclick="teacherLogin()">🔑 Login Guru</button>
+<div id="loginMsg" class="small" style="margin-top:10px"></div>
+</div>
+<div id="authSignedIn" style="display:none">
+<div class="result green"><b>✓ Guru sudah login</b><div id="signedInEmail" class="small"></div></div>
+<button class="btn secondary" onclick="teacherLogout()">Keluar dari akun</button>
+</div></div>
+
+<div class="card" id="teacherTools" style="display:none">
+<h2>👩‍🏫 Verifikasi Guru</h2>
 <label>Nama guru</label><input id="teacherName" placeholder="Yoti Endrianis, A.Md., S.Pd.">
 <label>Catatan verifikasi</label><textarea id="teacherNote" placeholder="Catatan guru..."></textarea>
 <button class="btn" onclick="verifyLast()">✅ Verifikasi pemeriksaan terakhir</button>
-<div id="verifyMsg" class="small" style="margin-top:10px"></div></div>
-<div class="card"><h3>☁️ Status Database</h3><div id="cloudStatus" class="notice">Menghubungkan ke database...</div></div></section>
+<div id="verifyMsg" class="small" style="margin-top:10px"></div>
+</div>
 
-<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.3.1</h2>
+<div class="card"><h3>☁️ Status Database</h3><div id="cloudStatus" class="notice">Menunggu status login...</div></div>
+</section>
+
+<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.4</h2>
 <ol><li>Isi ID ternak dan identitas siswa.</li><li>Ambil dokumentasi bila diperlukan.</li><li>Nilai 10 indikator kesehatan.</li><li>Tekan <b>Analisis & Simpan Pemeriksaan</b>.</li><li>Hasil masuk ke Riwayat dan Dashboard.</li><li>Guru dapat melakukan verifikasi dan catatan.</li><li>Data dikirim ke database pusat bila koneksi tersedia.</li></ol>
 <div class="notice"><b>Penting:</b> KATERINA adalah alat skrining pembelajaran. Hasilnya tidak memastikan diagnosis penyakit. Jangan memberikan obat berdasarkan hasil aplikasi.</div></div></section>
 </main>
-<footer>KATERINA v4.3.1 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
+<footer>KATERINA v4.4 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
 
 <script>
 const qs=[
@@ -115,11 +134,14 @@ const qs=[
 ["Feses","Konsistensi/warna tidak menunjukkan perubahan mencolok"]
 ];
 
-const LS="katerina_v431_local";
-const OLD_LS="katerina_v43_local";
+const LS="katerina_v44_local";
+const OLD_LS="katerina_v431_local";
+const OLD_LS2="katerina_v43_local";
 const SUPABASE_URL="https://bkrbxddqlwgxikptbvlf.supabase.co";
 const SUPABASE_KEY="sb_publishable_NaQYXkA4fYYpQ3e_RvY0Jg_21TAYpq0";
 const CLOUD_TABLE=SUPABASE_URL+"/rest/v1/screenings";
+const supabaseAuthClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let authSession=null;
 
 function localDate(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
 document.getElementById("date").value=localDate();
@@ -135,7 +157,11 @@ document.getElementById("questions").innerHTML=qs.map((q,i)=>`
 function getData(){
  try{
   let a=JSON.parse(localStorage.getItem(LS)||"null");
-  if(!Array.isArray(a)){a=JSON.parse(localStorage.getItem(OLD_LS)||"[]");if(a.length)localStorage.setItem(LS,JSON.stringify(a))}
+  if(!Array.isArray(a)){
+   a=JSON.parse(localStorage.getItem(OLD_LS)||"null");
+   if(!Array.isArray(a)) a=JSON.parse(localStorage.getItem(OLD_LS2)||"[]");
+   if(Array.isArray(a)&&a.length)localStorage.setItem(LS,JSON.stringify(a));
+  }
   return Array.isArray(a)?a:[];
  }catch(e){return[]}
 }
@@ -163,15 +189,31 @@ async function syncToCloud(rec){
 
 async function loadCloud(){
  try{
-  const r=await fetch(CLOUD_TABLE+"?select=*&order=created_at.desc",{headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY}});
+  if(!authSession){
+   setCloudStatus("🔒 Login guru diperlukan untuk membaca data pusat.");
+   return;
+  }
+  const r=await fetch(CLOUD_TABLE+"?select=*&order=created_at.desc",{
+   headers:{"apikey":SUPABASE_KEY,"Authorization":"Bearer "+authSession.access_token}
+  });
   if(!r.ok)throw new Error(await r.text());
   const rows=await r.json(),local=getData(),map=new Map();
-  [...local,...rows.map(x=>({clientId:x.client_id||"",cloudId:x.id||"",id:x.animal_id,student:x.student_name||"",group:x.group_name||"",date:x.inspection_date||"",score:Number(x.score||0),percent:Number(x.percent||0),status:x.status||"",action:x.action||"",teacher:x.teacher_name||"",teacherNote:x.teacher_note||"",cloudId:x.id||"",created:x.created_at||""}))].forEach(x=>{
+  [...local,...rows.map(x=>({
+   clientId:x.client_id||"",cloudId:x.id||"",id:x.animal_id,student:x.student_name||"",
+   group:x.group_name||"",date:x.inspection_date||"",score:Number(x.score||0),
+   percent:Number(x.percent||0),status:x.status||"",action:x.action||"",
+   teacher:x.teacher_name||"",teacherNote:x.teacher_note||"",created:x.created_at||""
+  }))].forEach(x=>{
    const k=x.clientId?"cid:"+x.clientId:"fp:"+fingerprint(x);
    if(!map.has(k)||x.created)map.set(k,x);
   });
-  setData([...map.values()]);render();setCloudStatus("☁️ Database terhubung. Data pusat berhasil dimuat.");
- }catch(e){console.warn(e);setCloudStatus("⚠️ Database belum dapat dibaca. Data lokal tetap tersedia.")}
+  setData([...map.values()]);
+  render();
+  setCloudStatus("☁️ Database terhubung. Data pusat berhasil dimuat.");
+ }catch(e){
+  console.warn(e);
+  setCloudStatus("⚠️ Database pusat tidak dapat dibaca: "+e.message);
+ }
 }
 
 async function analyze(){
@@ -218,47 +260,103 @@ function render(){
 }
 
 async function verifyLast(){
- const d=getData();if(!d.length){alert("Belum ada pemeriksaan.");return}
- const n=document.getElementById("teacherName").value.trim();if(!n){alert("Isi nama guru.");return}
+ const d=getData();
+ if(!d.length){alert("Belum ada pemeriksaan.");return}
+ if(!authSession){alert("Silakan login sebagai guru terlebih dahulu.");return}
+ const n=document.getElementById("teacherName").value.trim();
+ if(!n){alert("Isi nama guru.");return}
  const rec=d[d.length-1];
  rec.teacher=n;
  rec.teacherNote=document.getElementById("teacherNote").value.trim();
- setData(d);render();
+ setData(d);
+ render();
 
  try{
   let url="";
-  if(rec.cloudId){
-   url=CLOUD_TABLE+"?id=eq."+encodeURIComponent(rec.cloudId);
-  }else if(rec.clientId){
-   url=CLOUD_TABLE+"?client_id=eq."+encodeURIComponent(rec.clientId);
-  }else{
-   throw new Error("ID cloud/client tidak tersedia pada pemeriksaan terakhir");
-  }
+  if(rec.cloudId) url=CLOUD_TABLE+"?id=eq."+encodeURIComponent(rec.cloudId);
+  else if(rec.clientId) url=CLOUD_TABLE+"?client_id=eq."+encodeURIComponent(rec.clientId);
+  else throw new Error("ID cloud/client tidak tersedia pada pemeriksaan terakhir");
 
   const r=await fetch(url,{
    method:"PATCH",
    headers:{
     "apikey":SUPABASE_KEY,
-    "Authorization":"Bearer "+SUPABASE_KEY,
+    "Authorization":"Bearer "+authSession.access_token,
     "Content-Type":"application/json",
     "Prefer":"return=representation"
    },
    body:JSON.stringify({teacher_name:n,teacher_note:rec.teacherNote})
   });
-
   const txt=await r.text();
   if(!r.ok)throw new Error("HTTP "+r.status+" — "+txt);
-
   let updated=[];
   try{updated=txt?JSON.parse(txt):[]}catch(_){}
-  if(!Array.isArray(updated) || updated.length===0){
-   throw new Error("Database menerima permintaan tetapi tidak mengembalikan baris yang diperbarui. Periksa izin UPDATE/RLS.");
+  if(!Array.isArray(updated)||updated.length===0){
+   throw new Error("Database tidak mengembalikan baris yang diperbarui. Periksa RLS/izin UPDATE.");
   }
-
+  rec.cloudId=updated[0].id||rec.cloudId;
+  setData(d);
   document.getElementById("verifyMsg").textContent="✓ Verifikasi dan catatan guru berhasil disimpan ke database pusat.";
  }catch(e){
   console.warn("Verifikasi cloud gagal:",e);
-  document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan di perangkat. Sinkronisasi database gagal: "+e.message;
+  document.getElementById("verifyMsg").textContent="✓ Verifikasi tersimpan di perangkat, tetapi sinkronisasi database gagal: "+e.message;
+ }
+}
+
+async function teacherLogin(){
+ const email=document.getElementById("loginEmail").value.trim();
+ const password=document.getElementById("loginPassword").value;
+ const msg=document.getElementById("loginMsg");
+ if(!email||!password){msg.textContent="Isi email dan password guru.";return}
+ msg.textContent="Sedang login...";
+ const {data,error}=await supabaseAuthClient.auth.signInWithPassword({email,password});
+ if(error){msg.textContent="Login gagal: "+error.message;return}
+ authSession=data.session||null;
+ refreshAuthUI();
+ msg.textContent="Login berhasil.";
+ await loadCloud();
+ render();
+}
+
+async function teacherLogout(){
+ await supabaseAuthClient.auth.signOut();
+ authSession=null;
+ refreshAuthUI();
+}
+
+function refreshAuthUI(){
+ const out=document.getElementById("authSignedOut");
+ const ins=document.getElementById("authSignedIn");
+ const tools=document.getElementById("teacherTools");
+ if(!out||!ins||!tools)return;
+ if(authSession){
+  out.style.display="none";
+  ins.style.display="block";
+  tools.style.display="block";
+  document.getElementById("signedInEmail").textContent=authSession.user?.email||"";
+  setCloudStatus("🔐 Guru terautentikasi. Memuat data pusat...");
+ }else{
+  out.style.display="block";
+  ins.style.display="none";
+  tools.style.display="none";
+  setCloudStatus("🔒 Login guru diperlukan untuk membaca data pusat.");
+ }
+}
+
+async function initAuth(){
+ try{
+  const {data}=await supabaseAuthClient.auth.getSession();
+  authSession=data.session||null;
+  refreshAuthUI();
+  if(authSession) await loadCloud();
+  supabaseAuthClient.auth.onAuthStateChange((event,session)=>{
+   authSession=session||null;
+   refreshAuthUI();
+   if(event==="SIGNED_IN") loadCloud();
+  });
+ }catch(e){
+  console.warn("Auth init:",e);
+  refreshAuthUI();
  }
 }
 
@@ -271,7 +369,7 @@ function exportCSV(){
 }
 
 render();
-loadCloud();
-if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=431"));
+initAuth();
+if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=44"));
 </script>
 </body></html>

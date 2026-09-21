@@ -1,5 +1,5 @@
-const CACHE="katerina-v431";
-const ASSETS=["./","./index.html","./manifest.webmanifest","./icon.svg"];
+const CACHE="katerina-v44";
+const ASSETS=["./","./index.html","./manifest.webmanifest"];
 
 self.addEventListener("install",e=>{
   e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));

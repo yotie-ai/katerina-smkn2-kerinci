@@ -1,17 +1,9 @@
 {
-  "name": "KATERINA v4.3 - SMKN 2 Kerinci",
+  "name": "KATERINA v4.4 - SMKN 2 Kerinci",
   "short_name": "KATERINA",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f3f7f4",
   "theme_color": "#174c35",
-  "orientation": "portrait",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "orientation": "portrait"
 }
