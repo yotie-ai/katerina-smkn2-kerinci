@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#174c35">
-<meta name="description" content="KATERINA v4.4.2 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
+<meta name="description" content="KATERINA v4.4.3 - Sistem Skrining Kesehatan Ternak ATR SMKN 2 Kerinci">
 <link rel="manifest" href="manifest.webmanifest">
-<title>KATERINA v4.4.2 — SMKN 2 Kerinci</title>
+<title>KATERINA v4.4.3 — SMKN 2 Kerinci</title>
 <style>
 :root{--g:#174c35;--g2:#1f7a4d;--bg:#f3f7f4;--card:#fff;--line:#dbe7df;--text:#173127;--muted:#64746c;--warn:#b7791f;--red:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
@@ -33,7 +33,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.4.2</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
+<header><div class="wrap brand"><div class="logo">🐄</div><div><h1>🐄 KATERINA v4.4.3</h1><div class="tag">Sistem Skrining Kesehatan Ternak ATR — SMKN 2 Kerinci</div></div></div></header>
 
 <nav class="no-print">
 <button class="active" onclick="showPage('skrining',this)">📸 Skrining</button>
@@ -106,8 +106,9 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 
 <div class="card" id="passwordRecovery" style="display:none">
 <h2>🔐 Buat Password Baru</h2>
-<div class="small">Masukkan password baru untuk akun guru Anda. Gunakan minimal 8 karakter dan jangan bagikan password kepada siapa pun.</div>
-<div class="notice">💡 Jika email reset belum masuk, jangan menekan tombol reset berulang-ulang. Layanan email bawaan Supabase memiliki batas pengiriman.</div>
+<div class="result green"><b>✓ Tautan pemulihan diterima</b><div class="small">Sesi pemulihan aktif. Buat password baru di bawah ini.</div></div>
+<div class="small">Gunakan minimal 8 karakter. Jangan bagikan password kepada siapa pun.</div>
+<div class="notice">💡 Halaman ini hanya muncul setelah tautan pemulihan dari Supabase membuka KATERINA. Jika email belum masuk, jangan meminta reset berulang-ulang.</div>
 <label>Password baru</label><input id="newPassword" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password">
 <label>Ulangi password baru</label><input id="newPassword2" type="password" placeholder="Ulangi password baru" autocomplete="new-password">
 <button class="btn full" type="button" onclick="updatePassword()">💾 Simpan Password Baru</button>
@@ -126,11 +127,11 @@ table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:8px;borde
 <div class="card"><h3>☁️ Status Database</h3><div id="cloudStatus" class="notice">Menunggu status login...</div></div>
 </section>
 
-<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.4.2</h2>
+<section id="panduan" class="page"><div class="card"><h2>ℹ️ Panduan KATERINA v4.4.3</h2>
 <ol><li>Isi ID ternak dan identitas siswa.</li><li>Ambil dokumentasi bila diperlukan.</li><li>Nilai 10 indikator kesehatan.</li><li>Tekan <b>Analisis & Simpan Pemeriksaan</b>.</li><li>Hasil masuk ke Riwayat dan Dashboard.</li><li>Guru dapat melakukan verifikasi dan catatan.</li><li>Data dikirim ke database pusat bila koneksi tersedia.</li></ol>
 <div class="notice"><b>Penting:</b> KATERINA adalah alat skrining pembelajaran. Hasilnya tidak memastikan diagnosis penyakit. Jangan memberikan obat berdasarkan hasil aplikasi.</div></div></section>
 </main>
-<footer>KATERINA v4.4.2 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
+<footer>KATERINA v4.4.3 • SMKN 2 Kerinci • Pembelajaran ATR • Skrining pembelajaran, bukan diagnosis.</footer>
 
 <script>
 const qs=[
@@ -329,7 +330,7 @@ async function sendPasswordReset(){
  const {error}=await supabaseAuthClient.auth.resetPasswordForEmail(email,{redirectTo});
  if(error){msg.textContent="Gagal mengirim permintaan reset: "+error.message;return}
  localStorage.setItem("katerina_last_reset_request",String(Date.now()));
- msg.textContent="✓ Permintaan reset diproses. Jika akun terdaftar, periksa email guru/spam dan gunakan tautan reset terbaru.";
+ msg.textContent="✓ Permintaan reset diproses. Periksa email guru/spam. Jika email masuk, buka tautan reset dan KATERINA akan menampilkan formulir password baru.";
 }
 
 async function updatePassword(){
@@ -411,14 +412,18 @@ async function initAuth(){
  try{
   supabaseAuthClient.auth.onAuthStateChange((event,session)=>{
    authSession=session||null;
-   if(event==="PASSWORD_RECOVERY") showPasswordRecovery();
+   if(event==="PASSWORD_RECOVERY"){
+    setTimeout(()=>showPasswordRecovery(),0);
+   }
    refreshAuthUI();
-   if(event==="SIGNED_IN") loadCloud();
+   if(event==="SIGNED_IN"){
+    setTimeout(()=>loadCloud(),0);
+   }
   });
   const url=new URL(window.location.href);
   const params=url.searchParams;
   const hash=new URLSearchParams(window.location.hash.replace(/^#/,""));
-  if(params.get("reset")==="1") showPasswordRecovery();
+  if(params.get("reset")==="1" || params.get("code")) showPasswordRecovery();
   const authError=hash.get("error_description")||params.get("error_description");
   if(authError){
    document.getElementById("loginMsg").textContent="Pemulihan/login gagal: "+decodeURIComponent(authError.replace(/\+/g," "));

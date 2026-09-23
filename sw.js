@@ -1,4 +1,4 @@
-const CACHE="katerina-v442";
+const CACHE="katerina-v443";
 const ASSETS=["./","./index.html","./manifest.webmanifest"];
 
 self.addEventListener("install",e=>{
